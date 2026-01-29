@@ -1,0 +1,35 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ue_sms}
+    username: ${DB_USER:ue_sms}
+    password: ${DB_PASSWORD:ue_sms_password}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+# JWT settings (set JWT_SECRET env in production)
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:please_change_me_please_change_me_please_change_me_1234}
+      expirationMillis: ${JWT_EXPIRATION_MILLIS:3600000}
+  bootstrap:
+    enabled: ${APP_BOOTSTRAP_ENABLED:true}
+    teacher:
+      email: ${APP_BOOTSTRAP_TEACHER_EMAIL:admin.teacher@ue.edu}
+      password: ${APP_BOOTSTRAP_TEACHER_PASSWORD:ChangeMe123!}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

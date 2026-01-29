@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Student Dashboard - UE SMS</title>
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Student Dashboard</h1>
+      <div>
+        <button id="logoutBtn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>My Profile</h2>
+      <div id="studentProfile" class="muted">Loading...</div>
+
+      <h3>Update Contact</h3>
+      <form id="studentUpdateForm" class="inline">
+        <input name="phone" placeholder="Phone (optional)" maxlength="30"/>
+        <input name="address" placeholder="Address (optional)" maxlength="255"/>
+        <button type="submit">Save</button>
+        <span id="studentUpdateMsg" class="msg"></span>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Course Catalog</h2>
+      <div class="muted">Click “Enroll” to enroll into a course (capacity rules apply).</div>
+      <div id="courseList" class="table-wrap"></div>
+      <div id="courseMsg" class="msg"></div>
+    </section>
+
+    <section class="card">
+      <h2>My Enrollments</h2>
+      <div id="enrollmentList" class="table-wrap"></div>
+      <div id="enrollmentMsg" class="msg"></div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-departments
+      author: ue-sms
+      changes:
+        - createTable:
+            tableName: departments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_departments
+                    nullable: false
+              - column:
+                  name: code
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+        - addUniqueConstraint:
+            tableName: departments
+            columnNames: code
+            constraintName: uk_department_code
+
+  - changeSet:
+      id: 002-create-user-accounts
+      author: ue-sms
+      changes:
+        - createTable:
+            tableName: user_accounts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_user_accounts
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password_hash
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+        - addUniqueConstraint:
+            tableName: user_accounts
+            columnNames: email
+            constraintName: uk_user_email
+
+  - changeSet:
+      id: 003-create-teachers
+      author: ue-sms
+      changes:
+        - createTable:
+            tableName: teachers
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_teachers
+                    nullable: false
+              - column:
+                  name: user_account_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: employee_no
+                  type: VARCHAR(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hire_date
+                  type: DATE
+              - column:
+                  name: department_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+        - addUniqueConstraint:
+            tableName: teachers
+            columnNames: user_account_id
+            constraintName: uk_teacher_account
+        - addUniqueConstraint:
+            tableName: teachers
+            columnNames: employee_no
+            constraintName: uk_employee_no
+        - addForeignKeyConstraint:
+            baseTableName: teachers
+            baseColumnNames: user_account_id
+            referencedTableName: user_accounts
+            referencedColumnNames: id
+            constraintName: fk_teachers_user_account
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: teachers
+            baseColumnNames: department_id
+            referencedTableName: departments
+            referencedColumnNames: id
+            constraintName: fk_teachers_department
+
+  - changeSet:
+      id: 004-create-students
+      author: ue-sms
+      changes:
+        - createTable:
+            tableName: students
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_students
+                    nullable: false
+              - column:
+                  name: user_account_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: student_no
+                  type: VARCHAR(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: VARCHAR(30)
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  name: date_of_birth
+                  type: DATE
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: department_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+        - addUniqueConstraint:
+            tableName: students
+            columnNames: user_account_id
+            constraintName: uk_student_account
+        - addUniqueConstraint:
+            tableName: students
+            columnNames: student_no
+            constraintName: uk_student_no
+        - addForeignKeyConstraint:
+            baseTableName: students
+            baseColumnNames: user_account_id
+            referencedTableName: user_accounts
+            referencedColumnNames: id
+            constraintName: fk_students_user_account
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: students
+            baseColumnNames: department_id
+            referencedTableName: departments
+            referencedColumnNames: id
+            constraintName: fk_students_department
+
+  - changeSet:
+      id: 005-create-courses
+      author: ue-sms
+      changes:
+        - createTable:
+            tableName: courses
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_courses
+                    nullable: false
+              - column:
+                  name: code
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(160)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: credit
+                  type: NUMERIC(3,1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: capacity
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: department_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: teacher_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+        - addUniqueConstraint:
+            tableName: courses
+            columnNames: code
+            constraintName: uk_course_code
+        - addForeignKeyConstraint:
+            baseTableName: courses
+            baseColumnNames: department_id
+            referencedTableName: departments
+            referencedColumnNames: id
+            constraintName: fk_courses_department
+        - addForeignKeyConstraint:
+            baseTableName: courses
+            baseColumnNames: teacher_id
+            referencedTableName: teachers
+            referencedColumnNames: id
+            constraintName: fk_courses_teacher
+
+  - changeSet:
+      id: 006-create-enrollments
+      author: ue-sms
+      changes:
+        - createTable:
+            tableName: enrollments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_enrollments
+                    nullable: false
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enrolled_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: grade
+                  type: VARCHAR(5)
+        - addUniqueConstraint:
+            tableName: enrollments
+            columnNames: student_id, course_id
+            constraintName: uk_student_course
+        - addForeignKeyConstraint:
+            baseTableName: enrollments
+            baseColumnNames: student_id
+            referencedTableName: students
+            referencedColumnNames: id
+            constraintName: fk_enrollments_student
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: enrollments
+            baseColumnNames: course_id
+            referencedTableName: courses
+            referencedColumnNames: id
+            constraintName: fk_enrollments_course
+            onDelete: CASCADE
+        - createIndex:
+            tableName: enrollments
+            indexName: ix_enrollments_course_status
+            columns:
+              - column:
+                  name: course_id
+              - column:
+                  name: status

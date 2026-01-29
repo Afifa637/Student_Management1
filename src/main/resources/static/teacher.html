@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Teacher Dashboard - UE SMS</title>
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Teacher Dashboard</h1>
+      <div>
+        <button id="logoutBtn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>My Profile</h2>
+      <div id="teacherProfile" class="muted">Loading...</div>
+    </section>
+
+    <section class="card">
+      <h2>Departments (CRUD)</h2>
+      <form id="deptCreateForm" class="inline">
+        <input name="code" placeholder="Code (e.g., CSE)" maxlength="20" required/>
+        <input name="name" placeholder="Name" maxlength="120" required/>
+        <button type="submit">Create Department</button>
+        <span id="deptMsg" class="msg"></span>
+      </form>
+      <div id="deptList" class="table-wrap"></div>
+    </section>
+
+    <section class="card">
+      <h2>Courses (CRUD)</h2>
+      <form id="courseCreateForm" class="grid-2">
+        <label>Code <input name="code" required maxlength="30"/></label>
+        <label>Title <input name="title" required maxlength="160"/></label>
+        <label>Credit <input name="credit" required type="number" step="0.5" min="0.5"/></label>
+        <label>Capacity <input name="capacity" required type="number" min="1" value="60"/></label>
+        <label>Department
+          <select name="departmentId" id="courseDeptSelect" required></select>
+        </label>
+        <label>TeacherId (optional)
+          <input name="teacherId" type="number" placeholder="Leave empty to assign yourself"/>
+        </label>
+        <button type="submit">Create Course</button>
+        <span id="courseMsg" class="msg"></span>
+      </form>
+
+      <div id="teacherCourseList" class="table-wrap"></div>
+    </section>
+
+    <section class="card">
+      <h2>Students</h2>
+      <div class="muted">Teachers can view students, disable student accounts, and reset passwords.</div>
+      <div id="studentList" class="table-wrap"></div>
+      <div id="studentMsg" class="msg"></div>
+    </section>
+
+    <section class="card">
+      <h2>Create Teacher Account</h2>
+      <p class="muted">This endpoint is teacher-only. Students cannot create teacher accounts.</p>
+      <form id="teacherCreateForm" class="grid-2">
+        <label>Full Name <input name="fullName" required maxlength="150"/></label>
+        <label>Email <input name="email" required type="email" maxlength="150"/></label>
+        <label>Password <input name="password" required type="password" minlength="6" maxlength="72"/></label>
+        <label>Title
+          <select name="title">
+            <option>LECTURER</option>
+            <option>SENIOR_LECTURER</option>
+            <option>ASSISTANT_PROFESSOR</option>
+            <option>ASSOCIATE_PROFESSOR</option>
+            <option>PROFESSOR</option>
+          </select>
+        </label>
+        <label>Department
+          <select name="departmentId" id="teacherDeptSelect" required></select>
+        </label>
+        <label>Hire Date (optional) <input name="hireDate" type="date"/></label>
+        <button type="submit">Create Teacher</button>
+        <span id="teacherMsg" class="msg"></span>
+      </form>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
