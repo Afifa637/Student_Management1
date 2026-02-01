@@ -11,8 +11,9 @@ public class StudentManagementSystemApplication {
     }
 }
 
-// docker-compose down -v
-// docker-compose up --build
+// docker compose down
+//  docker compose build --no-cache
+//  docker compose up -d
 
 //using docker CLI to view table
 // docker exec -it ue_sms_db psql -U ue_sms -d ue_sms

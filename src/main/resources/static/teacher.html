@@ -3,87 +3,190 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Teacher Dashboard - UE SMS</title>
+  <title>Teacher Portal - UE SMS</title>
   <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>Teacher Dashboard</h1>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">UE</div>
       <div>
-        <button id="logoutBtn" class="secondary">Logout</button>
+        <div class="brand-title">University of Engineers</div>
+        <div class="brand-sub">Teacher Portal</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item active" href="/teacher.html">Dashboard</a>
+<!--      <a class="nav-item" href="/index.html">Home</a>-->
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="btn btn-ghost">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1>Teacher Dashboard</h1>
+      <div class="topbar-right">
+        <span class="pill">Role <b>TEACHER</b></span>
       </div>
     </header>
 
     <section class="card">
-      <h2>My Profile</h2>
+      <div class="card-head">
+        <h2>My Profile</h2>
+        <span class="muted">Teacher details</span>
+      </div>
       <div id="teacherProfile" class="muted">Loading...</div>
     </section>
 
+    <section class="grid-2">
+      <section class="card">
+        <div class="card-head">
+          <h2>Departments</h2>
+          <span class="muted">Create / Update / Delete</span>
+        </div>
+
+        <form id="deptCreateForm" class="form">
+          <div class="form-row">
+            <label>Code
+              <input name="code" placeholder="e.g., CSE" maxlength="20" required/>
+            </label>
+            <label>Name
+              <input name="name" placeholder="Department Name" maxlength="120" required/>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Department</button>
+            <span id="deptMsg" class="msg"></span>
+          </div>
+        </form>
+
+        <div id="deptList" class="table-wrap"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Courses</h2>
+          <span class="muted">Create / Update / Delete</span>
+        </div>
+
+        <form id="courseCreateForm" class="form">
+          <div class="form-row">
+            <label>Code
+              <input name="code" required maxlength="30" placeholder="e.g., CSE-101"/>
+            </label>
+            <label>Title
+              <input name="title" required maxlength="160" placeholder="Course title"/>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>Credit
+              <input name="credit" required type="number" step="0.5" min="0.5"/>
+            </label>
+            <label>Capacity
+              <input name="capacity" required type="number" min="1" value="60"/>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>Department
+              <select name="departmentId" id="courseDeptSelect" required></select>
+            </label>
+            <label>TeacherId (optional)
+              <input name="teacherId" type="number" placeholder="Empty = assign yourself"/>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Course</button>
+            <span id="courseMsg" class="msg"></span>
+          </div>
+        </form>
+
+        <div id="teacherCourseList" class="table-wrap"></div>
+      </section>
+    </section>
+
+    <section class="grid-2">
+      <section class="card">
+        <div class="card-head">
+          <h2>Students</h2>
+          <span class="muted">Manage accounts</span>
+        </div>
+        <div id="studentList" class="table-wrap"></div>
+        <div id="studentMsg" class="msg"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Teachers</h2>
+          <span class="muted">List / Disable / Reset Password</span>
+        </div>
+        <div id="teacherList" class="table-wrap"></div>
+        <div id="teacherListMsg" class="msg"></div>
+      </section>
+    </section>
+
     <section class="card">
-      <h2>Departments (CRUD)</h2>
-      <form id="deptCreateForm" class="inline">
-        <input name="code" placeholder="Code (e.g., CSE)" maxlength="20" required/>
-        <input name="name" placeholder="Name" maxlength="120" required/>
-        <button type="submit">Create Department</button>
-        <span id="deptMsg" class="msg"></span>
+      <div class="card-head">
+        <h2>Create Teacher Account</h2>
+        <span class="muted">Teacher-only</span>
+      </div>
+
+      <form id="teacherCreateForm" class="form">
+        <div class="form-row">
+          <label>Full Name <input name="fullName" required maxlength="150"/></label>
+          <label>Email <input name="email" required type="email" maxlength="150"/></label>
+        </div>
+
+        <div class="form-row">
+          <label>Password <input name="password" required type="password" minlength="6" maxlength="72"/></label>
+          <label>Title
+            <select name="title">
+              <option>LECTURER</option>
+              <option>SENIOR_LECTURER</option>
+              <option>ASSISTANT_PROFESSOR</option>
+              <option>ASSOCIATE_PROFESSOR</option>
+              <option>PROFESSOR</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>Department
+            <select name="departmentId" id="teacherDeptSelect" required></select>
+          </label>
+          <label>Hire Date (optional)
+            <input name="hireDate" type="date"/>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Create Teacher</button>
+          <span id="teacherMsg" class="msg"></span>
+        </div>
       </form>
-      <div id="deptList" class="table-wrap"></div>
     </section>
+  </main>
+</div>
 
-    <section class="card">
-      <h2>Courses (CRUD)</h2>
-      <form id="courseCreateForm" class="grid-2">
-        <label>Code <input name="code" required maxlength="30"/></label>
-        <label>Title <input name="title" required maxlength="160"/></label>
-        <label>Credit <input name="credit" required type="number" step="0.5" min="0.5"/></label>
-        <label>Capacity <input name="capacity" required type="number" min="1" value="60"/></label>
-        <label>Department
-          <select name="departmentId" id="courseDeptSelect" required></select>
-        </label>
-        <label>TeacherId (optional)
-          <input name="teacherId" type="number" placeholder="Leave empty to assign yourself"/>
-        </label>
-        <button type="submit">Create Course</button>
-        <span id="courseMsg" class="msg"></span>
-      </form>
-
-      <div id="teacherCourseList" class="table-wrap"></div>
-    </section>
-
-    <section class="card">
-      <h2>Students</h2>
-      <div class="muted">Teachers can view students, disable student accounts, and reset passwords.</div>
-      <div id="studentList" class="table-wrap"></div>
-      <div id="studentMsg" class="msg"></div>
-    </section>
-
-    <section class="card">
-      <h2>Create Teacher Account</h2>
-      <p class="muted">This endpoint is teacher-only. Students cannot create teacher accounts.</p>
-      <form id="teacherCreateForm" class="grid-2">
-        <label>Full Name <input name="fullName" required maxlength="150"/></label>
-        <label>Email <input name="email" required type="email" maxlength="150"/></label>
-        <label>Password <input name="password" required type="password" minlength="6" maxlength="72"/></label>
-        <label>Title
-          <select name="title">
-            <option>LECTURER</option>
-            <option>SENIOR_LECTURER</option>
-            <option>ASSISTANT_PROFESSOR</option>
-            <option>ASSOCIATE_PROFESSOR</option>
-            <option>PROFESSOR</option>
-          </select>
-        </label>
-        <label>Department
-          <select name="departmentId" id="teacherDeptSelect" required></select>
-        </label>
-        <label>Hire Date (optional) <input name="hireDate" type="date"/></label>
-        <button type="submit">Create Teacher</button>
-        <span id="teacherMsg" class="msg"></span>
-      </form>
-    </section>
+<!-- simple modal -->
+<div id="modal" class="modal hidden">
+  <div class="modal-backdrop" data-close="1"></div>
+  <div class="modal-card">
+    <div class="modal-head">
+      <div id="modalTitle" class="modal-title">Edit</div>
+      <button class="btn btn-ghost" data-close="1">✕</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
   </div>
+</div>
 
-  <script src="/app.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

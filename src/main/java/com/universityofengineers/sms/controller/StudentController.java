@@ -1,8 +1,6 @@
 package com.universityofengineers.sms.controller;
 
-import com.universityofengineers.sms.dto.request.PasswordResetRequest;
-import com.universityofengineers.sms.dto.request.StudentStatusUpdateRequest;
-import com.universityofengineers.sms.dto.request.StudentUpdateMeRequest;
+import com.universityofengineers.sms.dto.request.*;
 import com.universityofengineers.sms.dto.response.ApiMessageResponse;
 import com.universityofengineers.sms.dto.response.StudentResponse;
 import com.universityofengineers.sms.service.StudentService;
@@ -21,6 +19,12 @@ public class StudentController {
 
     private final StudentService studentService;
 
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping
+    public StudentResponse create(@Valid @RequestBody StudentRegistrationRequest req) {
+        return studentService.createByTeacher(req);
+    }
+
     // Teacher operations
     @PreAuthorize("hasRole('TEACHER')")
     @GetMapping
@@ -32,6 +36,12 @@ public class StudentController {
     @GetMapping("/{id}")
     public StudentResponse get(@PathVariable Long id) {
         return studentService.get(id);
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PutMapping("/{id}")
+    public StudentResponse update(@PathVariable Long id, @Valid @RequestBody StudentUpdateRequest req) {
+        return studentService.update(id, req);
     }
 
     @PreAuthorize("hasRole('TEACHER')")

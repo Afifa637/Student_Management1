@@ -1,7 +1,9 @@
 package com.universityofengineers.sms.service;
 
+import com.universityofengineers.sms.dto.request.PasswordResetRequest;
 import com.universityofengineers.sms.dto.request.TeacherCreateRequest;
 import com.universityofengineers.sms.dto.request.TeacherUpdateRequest;
+import com.universityofengineers.sms.dto.request.TeacherUpdateMeRequest;
 import com.universityofengineers.sms.dto.response.DepartmentResponse;
 import com.universityofengineers.sms.dto.response.TeacherResponse;
 import com.universityofengineers.sms.entity.Role;
@@ -37,12 +39,14 @@ public class TeacherService {
 
     @Transactional(readOnly = true)
     public TeacherResponse get(Long id) {
-        return toResponse(teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Teacher not found.")));
+        return toResponse(teacherRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found.")));
     }
 
     public Teacher getCurrentTeacherEntity() {
         Long accountId = SecurityUtils.currentAccountId();
-        return teacherRepository.findByAccountId(accountId).orElseThrow(() -> new ResourceNotFoundException("Teacher profile not found."));
+        return teacherRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher profile not found."));
     }
 
     @Transactional(readOnly = true)
@@ -89,7 +93,9 @@ public class TeacherService {
 
     @Transactional
     public TeacherResponse update(Long id, TeacherUpdateRequest req) {
-        Teacher t = teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Teacher not found."));
+        Teacher t = teacherRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found."));
+
         var dept = departmentRepository.findById(req.getDepartmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found."));
 
@@ -97,14 +103,47 @@ public class TeacherService {
         t.setTitle(req.getTitle());
         t.setHireDate(req.getHireDate());
         t.setDepartment(dept);
+
         return toResponse(teacherRepository.save(t));
+    }
+
+    // ✅ NEW: teacher self update (practical)
+    @Transactional
+    public TeacherResponse updateMe(TeacherUpdateMeRequest req) {
+        Teacher t = getCurrentTeacherEntity();
+        if (req.getHireDate() != null) t.setHireDate(req.getHireDate());
+        if (req.getTitle() != null) t.setTitle(req.getTitle());
+        if (req.getDepartmentId() != null) {
+            var dept = departmentRepository.findById(req.getDepartmentId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Department not found."));
+            t.setDepartment(dept);
+        }
+        return toResponse(teacherRepository.save(t));
+    }
+
+    // ✅ NEW: enable/disable without deleting
+    @Transactional
+    public void setEnabled(Long teacherId, boolean enabled) {
+        Teacher t = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found."));
+        UserAccount account = t.getAccount();
+        account.setEnabled(enabled);
+        userAccountRepository.save(account);
     }
 
     @Transactional
     public void disableTeacher(Long id) {
-        Teacher t = teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Teacher not found."));
+        setEnabled(id, false);
+    }
+
+    // ✅ NEW: reset password
+    @Transactional
+    public void resetTeacherPassword(Long teacherId, PasswordResetRequest req) {
+        Teacher t = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found."));
         UserAccount account = t.getAccount();
-        account.setEnabled(false);
+        if (!account.isEnabled()) throw new BadRequestException("Account is disabled.");
+        account.setPasswordHash(passwordEncoder.encode(req.getNewPassword()));
         userAccountRepository.save(account);
     }
 

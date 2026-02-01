@@ -1,6 +1,8 @@
 package com.universityofengineers.sms.controller;
 
+import com.universityofengineers.sms.dto.request.PasswordResetRequest;
 import com.universityofengineers.sms.dto.request.TeacherCreateRequest;
+import com.universityofengineers.sms.dto.request.TeacherUpdateMeRequest;
 import com.universityofengineers.sms.dto.request.TeacherUpdateRequest;
 import com.universityofengineers.sms.dto.response.ApiMessageResponse;
 import com.universityofengineers.sms.dto.response.TeacherResponse;
@@ -34,16 +36,6 @@ public class TeacherController {
     }
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping("/me")
-    public TeacherResponse me() {
-        return teacherService.me();
-    }
-
-    /**
-     * Teachers are created by an existing teacher.
-     * (No public "signup as teacher" endpoint exists.)
-     */
-    @PreAuthorize("hasRole('TEACHER')")
     @PostMapping
     public TeacherResponse create(@Valid @RequestBody TeacherCreateRequest req) {
         return teacherService.create(req);
@@ -53,6 +45,17 @@ public class TeacherController {
     @PutMapping("/{id}")
     public TeacherResponse update(@PathVariable Long id, @Valid @RequestBody TeacherUpdateRequest req) {
         return teacherService.update(id, req);
+    }
+
+    // enable/disable (practical status)
+    @PreAuthorize("hasRole('TEACHER')")
+    @PutMapping("/{id}/enabled")
+    public ApiMessageResponse setEnabled(@PathVariable Long id, @RequestParam boolean enabled) {
+        teacherService.setEnabled(id, enabled);
+        return ApiMessageResponse.builder()
+                .timestamp(Instant.now())
+                .message("Teacher enabled status updated.")
+                .build();
     }
 
     @PreAuthorize("hasRole('TEACHER')")
@@ -68,5 +71,28 @@ public class TeacherController {
                 .timestamp(Instant.now())
                 .message("Teacher account disabled.")
                 .build();
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping("/{id}/reset-password")
+    public ApiMessageResponse resetPassword(@PathVariable Long id, @Valid @RequestBody PasswordResetRequest req) {
+        teacherService.resetTeacherPassword(id, req);
+        return ApiMessageResponse.builder()
+                .timestamp(Instant.now())
+                .message("Teacher password reset.")
+                .build();
+    }
+
+    // self
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping("/me")
+    public TeacherResponse me() {
+        return teacherService.me();
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PutMapping("/me")
+    public TeacherResponse updateMe(@Valid @RequestBody TeacherUpdateMeRequest req) {
+        return teacherService.updateMe(req);
     }
 }

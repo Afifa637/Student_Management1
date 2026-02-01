@@ -3,75 +3,128 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>University of Engineers - SMS</title>
+  <title>University of Engineers • Student Management System</title>
   <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>University of Engineers - Student Management System</h1>
+<div class="container">
 
-    <div class="grid">
-      <section class="card">
-        <h2>Student Sign Up</h2>
-        <p class="muted">Students can only sign up as <b>Student</b>. There is no “Sign up as Teacher”.</p>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="brand-title">
+        <h1>University of Engineers • SMS Portal</h1>
+        <small>Engineering Faculty & Students • Secure Role Based Access</small>
+      </div>
+    </div>
 
-        <form id="registerForm">
+    <div class="actions">
+      <span class="pill">Swagger <span class="kbd">/swagger-ui.html</span></span>
+      <a class="pill" href="/swagger-ui.html" target="_blank" rel="noreferrer">Open API Docs →</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <h2>Welcome to the Student Management System</h2>
+    <p>
+      Manage departments, courses, enrollments and student records — built for a modern Engineering University workflow.
+      Students can register and enroll. Teachers can manage academic resources and accounts.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="label">Portal Type</div>
+        <div class="value">Academic ERP</div>
+      </div>
+      <div class="stat">
+        <div class="label">Access</div>
+        <div class="value">Student / Teacher</div>
+      </div>
+      <div class="stat">
+        <div class="label">Security</div>
+        <div class="value">JWT + RBAC</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Student Registration</h2>
+      <p class="muted">
+        Students can only sign up as <b>Student</b>. Teacher accounts are created by an existing teacher (or bootstrap admin).
+      </p>
+
+      <form id="registerForm">
+        <div class="grid-2">
           <label>Full Name
-            <input name="fullName" required maxlength="150"/>
+            <input name="fullName" required maxlength="150" placeholder="e.g. Afi Sul"/>
           </label>
 
           <label>Email
-            <input name="email" required type="email" maxlength="150"/>
+            <input name="email" required type="email" maxlength="150" placeholder="student@ue.edu"/>
           </label>
+        </div>
 
+        <div class="grid-2">
           <label>Password
-            <input name="password" required type="password" minlength="6" maxlength="72"/>
+            <input name="password" required type="password" minlength="6" maxlength="72" placeholder="Minimum 6 characters"/>
           </label>
 
           <label>Department
             <select name="departmentId" id="deptSelect" required></select>
           </label>
+        </div>
 
+        <div class="grid-2">
           <label>Phone (optional)
-            <input name="phone" maxlength="30"/>
+            <input name="phone" maxlength="30" placeholder="+880..."/>
           </label>
 
           <label>Address (optional)
-            <input name="address" maxlength="255"/>
+            <input name="address" maxlength="255" placeholder="Dhaka, Bangladesh"/>
           </label>
+        </div>
 
-          <button type="submit">Create Student Account</button>
-          <div id="registerMsg" class="msg"></div>
-        </form>
-      </section>
+        <button type="submit">Create Student Account</button>
+        <div id="registerMsg" class="msg"></div>
 
-      <section class="card">
-        <h2>Login</h2>
-        <form id="loginForm">
-          <label>Email
-            <input name="email" required type="email" maxlength="150"/>
-          </label>
-          <label>Password
-            <input name="password" required type="password" minlength="6" maxlength="72"/>
-          </label>
-          <button type="submit">Login</button>
-          <div id="loginMsg" class="msg"></div>
-        </form>
+        <div class="footer-note">
+          After registration, you’ll be redirected to the Student Dashboard automatically.
+        </div>
+      </form>
+    </section>
 
-        <hr/>
+    <section class="card">
+      <h2>Login</h2>
 
-        <p class="muted">
-          Teacher accounts are created by an existing teacher (or via bootstrap). Default bootstrap teacher:
-        </p>
-        <pre class="code">Email: admin.teacher@ue.edu
+      <form id="loginForm">
+        <label>Email
+          <input name="email" required type="email" maxlength="150" placeholder="admin.teacher@ue.edu"/>
+        </label>
+        <label>Password
+          <input name="password" required type="password" minlength="6" maxlength="72" placeholder="••••••••"/>
+        </label>
+        <button type="submit">Login</button>
+        <div id="loginMsg" class="msg"></div>
+      </form>
+
+      <hr class="sep"/>
+
+      <h3>Bootstrap Teacher (demo)</h3>
+      <pre class="code">Email: admin.teacher@ue.edu
 Password: ChangeMe123!</pre>
-        <p class="muted">Change these via environment variables in docker-compose or application.yml.</p>
 
-        <p class="muted">Swagger UI: <a href="/swagger-ui.html" target="_blank" rel="noreferrer">Open API docs</a></p>
-      </section>
-    </div>
+      <p class="muted">
+        Logged in users are routed to <b>Teacher</b> or <b>Student</b> dashboard based on role.
+      </p>
+    </section>
   </div>
 
-  <script src="/app.js"></script>
+  <div class="footer-note">
+    © University of Engineers • Student Management System
+  </div>
+</div>
+
+<script src="/app.js"></script>
 </body>
 </html>

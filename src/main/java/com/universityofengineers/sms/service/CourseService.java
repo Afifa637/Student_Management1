@@ -6,14 +6,12 @@ import com.universityofengineers.sms.dto.response.DepartmentResponse;
 import com.universityofengineers.sms.dto.response.TeacherResponse;
 import com.universityofengineers.sms.entity.Course;
 import com.universityofengineers.sms.entity.EnrollmentStatus;
+import com.universityofengineers.sms.entity.Student;
 import com.universityofengineers.sms.entity.Teacher;
 import com.universityofengineers.sms.exception.BadRequestException;
 import com.universityofengineers.sms.exception.ForbiddenException;
 import com.universityofengineers.sms.exception.ResourceNotFoundException;
-import com.universityofengineers.sms.repository.CourseRepository;
-import com.universityofengineers.sms.repository.DepartmentRepository;
-import com.universityofengineers.sms.repository.EnrollmentRepository;
-import com.universityofengineers.sms.repository.TeacherRepository;
+import com.universityofengineers.sms.repository.*;
 import com.universityofengineers.sms.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +27,41 @@ public class CourseService {
     private final DepartmentRepository departmentRepository;
     private final TeacherRepository teacherRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final StudentRepository studentRepository;
 
     @Transactional(readOnly = true)
     public List<CourseResponse> list() {
-        return courseRepository.findAll().stream().map(this::toResponse).toList();
+
+        Long accountId = SecurityUtils.currentAccountId();
+
+        // STUDENT → only own department
+        if (SecurityUtils.isStudent()) {
+            Student student = studentRepository.findByAccountId(accountId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Student profile not found."));
+
+            Long deptId = student.getDepartment().getId();
+
+            return courseRepository.findAllByDepartmentId(deptId)
+                    .stream()
+                    .map(this::toResponse)
+                    .toList();
+        }
+
+        // TEACHER → only own department
+        if (SecurityUtils.isTeacher()) {
+            Teacher teacher = teacherRepository.findByAccountId(accountId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Teacher profile not found."));
+
+            Long deptId = teacher.getDepartment().getId();
+
+            return courseRepository.findAllByDepartmentId(deptId)
+                    .stream()
+                    .map(this::toResponse)
+                    .toList();
+        }
+
+        // fallback (should never happen)
+        throw new ForbiddenException("Unauthorized access to courses.");
     }
 
     @Transactional(readOnly = true)

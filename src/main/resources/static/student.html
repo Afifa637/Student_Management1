@@ -3,45 +3,95 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Student Dashboard - UE SMS</title>
+  <title>Student Portal - UE SMS</title>
   <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>Student Dashboard</h1>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">UE</div>
       <div>
-        <button id="logoutBtn" class="secondary">Logout</button>
+        <div class="brand-title">University of Engineers</div>
+        <div class="brand-sub">Student Portal</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item active" href="/student.html">Dashboard</a>
+<!--      <a class="nav-item" href="/index.html">Home</a>-->
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="btn btn-ghost">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1>Student Dashboard</h1>
+      <div class="topbar-right">
+        <span class="pill">Logged in as <b>STUDENT</b></span>
       </div>
     </header>
 
-    <section class="card">
-      <h2>My Profile</h2>
-      <div id="studentProfile" class="muted">Loading...</div>
+    <section class="grid-2">
+      <section class="card">
+        <div class="card-head">
+          <h2>My Profile</h2>
+          <span class="muted">All details</span>
+        </div>
+        <div id="studentProfile" class="muted">Loading...</div>
+      </section>
 
-      <h3>Update Contact</h3>
-      <form id="studentUpdateForm" class="inline">
-        <input name="phone" placeholder="Phone (optional)" maxlength="30"/>
-        <input name="address" placeholder="Address (optional)" maxlength="255"/>
-        <button type="submit">Save</button>
-        <span id="studentUpdateMsg" class="msg"></span>
-      </form>
+      <section class="card">
+        <div class="card-head">
+          <h2>Update Contact</h2>
+          <span class="muted">Phone & Address only</span>
+        </div>
+
+        <form id="studentUpdateForm" class="form">
+          <div class="form-row">
+            <label>Phone (optional)
+              <input name="phone" placeholder="e.g., +8801XXXXXXXXX" maxlength="30"/>
+            </label>
+            <label>Address (optional)
+              <input name="address" placeholder="Street, City, Country" maxlength="255"/>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <span id="studentUpdateMsg" class="msg"></span>
+          </div>
+        </form>
+
+        <div class="hint">
+          Tip: after saving, your profile card refreshes automatically.
+        </div>
+      </section>
     </section>
 
     <section class="card">
-      <h2>Course Catalog</h2>
-      <div class="muted">Click “Enroll” to enroll into a course (capacity rules apply).</div>
+      <div class="card-head">
+        <h2>Course Catalog</h2>
+        <span class="muted">Enroll in courses</span>
+      </div>
       <div id="courseList" class="table-wrap"></div>
       <div id="courseMsg" class="msg"></div>
     </section>
 
     <section class="card">
-      <h2>My Enrollments</h2>
+      <div class="card-head">
+        <h2>My Enrollments</h2>
+        <span class="muted">Drop & track status</span>
+      </div>
       <div id="enrollmentList" class="table-wrap"></div>
       <div id="enrollmentMsg" class="msg"></div>
     </section>
-  </div>
+  </main>
+</div>
 
-  <script src="/app.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>
