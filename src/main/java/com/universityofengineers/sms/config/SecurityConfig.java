@@ -49,10 +49,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll()
 
-                        // Allow reading catalog endpoints for authenticated users only (adjust if you want public)
+                        // Allow reading catalog endpoints for authenticated users only
                         .requestMatchers(HttpMethod.GET, "/api/departments/**","/api/courses/**").permitAll()
 
-                        // Everything else requires auth (and method-level checks handle RBAC)
+                        // Everything else requires auth hangle RBAC and JWT
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

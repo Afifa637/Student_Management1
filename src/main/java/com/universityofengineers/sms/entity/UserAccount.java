@@ -26,7 +26,7 @@ public class UserAccount {
     @Column(nullable = false, length = 150)
     private String email;
 
-    @JsonIgnore
+    @JsonIgnore //never ret in API
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 

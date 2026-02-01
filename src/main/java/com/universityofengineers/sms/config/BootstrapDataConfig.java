@@ -40,7 +40,7 @@ public class BootstrapDataConfig {
         return args -> {
             if (!bootstrapEnabled) return;
 
-            // Departments (example: University of Engineers)
+            // Departments
             if (departmentRepository.count() == 0) {
                 List<Department> depts = List.of(
                         Department.builder().code("CSE").name("Computer Science & Engineering").build(),
