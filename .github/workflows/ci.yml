@@ -27,7 +27,6 @@ jobs:
       - name: Run Maven tests
         run: mvn -B -ntp clean verify
 
-      # Always upload test reports so you can show them to your instructor even if tests fail
       - name: Upload Test Reports (Surefire/Failsafe)
         if: always()
         uses: actions/upload-artifact@v4
