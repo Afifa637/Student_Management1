@@ -37,12 +37,12 @@ public class Course {
     @Column(nullable = false)
     private int capacity = 60;
 
-    // Cardinality: Department 1-M Course
+    // Cardinality: Department 1..M Course
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    // Cardinality: Teacher 1-M Course (many courses can be taught by one teacher)
+    // Cardinality: Teacher 1..M Course (many courses can be taught by one teacher)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
