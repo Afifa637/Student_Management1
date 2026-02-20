@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class StudentRegistrationRequest {
 
-    @NotBlank(message = "Email is required")
+    @NotBlank
     @Size(max = 150)
-    @Email(message = "Invalid email format")
+    @Email
     private String email;
 
     @NotBlank

@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,15 +36,6 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.FORBIDDEN, "Access denied.", req.getRequestURI(), null);
     }
 
-    /**
-     * Key for /api/auth/login: authentication failures should be 401 (not 500).
-     */
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiError> handleAuthentication(AuthenticationException ex, HttpServletRequest req) {
-        return build(HttpStatus.UNAUTHORIZED, "Invalid credentials.", req.getRequestURI(),
-                Map.of("exception", ex.getClass().getSimpleName()));
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest req) {
         Map<String, Object> details = new HashMap<>();
@@ -59,8 +49,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex, HttpServletRequest req) {
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.", req.getRequestURI(),
-                Map.of("exception", ex.getClass().getSimpleName()));
+        // Avoid leaking internal details in production
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.", req.getRequestURI(), Map.of("exception", ex.getClass().getSimpleName()));
     }
 
     private ResponseEntity<ApiError> build(HttpStatus status, String message, String path, Map<String, Object> details) {

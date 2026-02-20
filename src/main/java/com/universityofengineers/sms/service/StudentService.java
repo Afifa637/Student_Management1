@@ -34,6 +34,10 @@ public class StudentService {
     private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // -----------------------------
+    // TEACHER: CRUD
+    // -----------------------------
+
     @Transactional
     public StudentResponse createByTeacher(StudentRegistrationRequest req) {
         String email = req.getEmail().trim().toLowerCase();
@@ -138,6 +142,10 @@ public class StudentService {
         account.setPasswordHash(passwordEncoder.encode(req.getNewPassword()));
         userAccountRepository.save(account);
     }
+
+    // -----------------------------
+    // STUDENT: self-service
+    // -----------------------------
 
     public Student getCurrentStudentEntity() {
         Long accountId = SecurityUtils.currentAccountId();
