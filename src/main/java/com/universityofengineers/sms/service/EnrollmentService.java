@@ -42,8 +42,13 @@ public class EnrollmentService {
     @Transactional
     public void dropMyEnrollment(Long enrollmentId) {
         Student me = getCurrentStudent();
-        Enrollment e = enrollmentRepository.findById(enrollmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Enrollment not found."));
+        Enrollment e = enrollmentRepository.findById(enrollmentId).orElseThrow(() -> new ResourceNotFoundException("Enrollment not found."));
+        // Practical authorization: a teacher can grade ONLY the courses they teach.
+        Teacher currentTeacher = teacherRepository.findByAccountId(SecurityUtils.currentAccountId())
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher profile not found."));
+        if (!e.getCourse().getTeacher().getId().equals(currentTeacher.getId())) {
+            throw new ForbiddenException("You can only grade enrollments for your own courses.");
+        }
 
         if (!e.getStudent().getId().equals(me.getId())) {
             throw new ForbiddenException("You can only drop your own enrollments.");
@@ -51,7 +56,6 @@ public class EnrollmentService {
         if (e.getStatus() != EnrollmentStatus.ENROLLED) {
             throw new BadRequestException("Enrollment is not active.");
         }
-
         e.setStatus(EnrollmentStatus.DROPPED);
         enrollmentRepository.save(e);
     }

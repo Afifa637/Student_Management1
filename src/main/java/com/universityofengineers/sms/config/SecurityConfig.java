@@ -1,8 +1,6 @@
 package com.universityofengineers.sms.config;
 
 import com.universityofengineers.sms.security.JwtAuthenticationFilter;
-import com.universityofengineers.sms.security.RestAccessDeniedHandler;
-import com.universityofengineers.sms.security.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +26,6 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    private final RestAccessDeniedHandler restAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,18 +43,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(restAuthenticationEntryPoint)
-                        .accessDeniedHandler(restAccessDeniedHandler)
-                )
                 .authorizeHttpRequests(auth -> auth
+                        // Public
                         .requestMatchers("/","/index.html","/student.html","/teacher.html","/app.js","/styles.css","/favicon.ico","/error").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll()
 
-                        // Your current code allows these publicly
+                        // Allow reading catalog endpoints for authenticated users only
                         .requestMatchers(HttpMethod.GET, "/api/departments/**","/api/courses/**").permitAll()
 
+                        // Everything else requires auth hangle RBAC and JWT
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
