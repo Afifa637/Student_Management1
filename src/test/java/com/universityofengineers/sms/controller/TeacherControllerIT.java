@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SmsIntegrationTest
-class TeacherControllerIntegrationTest extends IntegrationTestBase {
+class TeacherControllerIT extends IntegrationTestBase {
 
     @Test
     void studentCannotAccessTeacherEndpoints() throws Exception {

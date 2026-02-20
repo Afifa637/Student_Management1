@@ -69,6 +69,7 @@ class EnrollmentServiceTest {
                 .build();
 
         when(studentRepository.findByAccountId(accountId)).thenReturn(Optional.of(student));
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
 
         EnrollmentCreateRequest req = new EnrollmentCreateRequest();
         req.setCourseId(10L);

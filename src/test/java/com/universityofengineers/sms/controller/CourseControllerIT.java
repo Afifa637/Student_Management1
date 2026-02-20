@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SmsIntegrationTest
-class CourseControllerIntegrationTest extends IntegrationTestBase {
+class CourseControllerIT extends IntegrationTestBase {
 
     @Test
     void list_shouldReturnCoursesOnlyFromCallerDepartment() throws Exception {

@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SmsIntegrationTest
-class AuthControllerIntegrationTest extends IntegrationTestBase {
+class AuthControllerIT extends IntegrationTestBase {
 
     @Test
     void registerStudent_shouldReturn201_andJwtTokenAndStudentId() throws Exception {

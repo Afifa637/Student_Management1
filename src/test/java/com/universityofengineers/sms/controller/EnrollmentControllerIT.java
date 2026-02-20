@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SmsIntegrationTest
-class EnrollmentControllerIntegrationTest extends IntegrationTestBase {
+class EnrollmentControllerIT extends IntegrationTestBase {
 
     @Test
     void studentEnrollFlow_shouldCoverEnroll_list_drop_andTeacherGrade() throws Exception {
