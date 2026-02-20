@@ -22,19 +22,12 @@
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc.version>2.6.0</springdoc.version>
     </properties>
-    
+
     <dependencies>
         <!-- Web / REST -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- In-memory DB for integration tests (fast & CI-friendly) -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <!-- Validation (Jakarta) -->
