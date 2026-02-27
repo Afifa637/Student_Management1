@@ -39,21 +39,21 @@ public class Department {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    // Cardinality: Department 1..M Student
+    // Cardinality: Department 1M Student
     @JsonIgnore
     @OneToMany(mappedBy = "department")
     @ToString.Exclude
     @Builder.Default
     private List<Student> students = new ArrayList<>();
 
-    // Cardinality: Department 1..M Teacher
+    // Cardinality: Department 1M Teacher
     @JsonIgnore
     @OneToMany(mappedBy = "department")
     @ToString.Exclude
     @Builder.Default
     private List<Teacher> teachers = new ArrayList<>();
 
-    // Cardinality: Department 1..M Course
+    // Cardinality: Department 1M Course
     @JsonIgnore
     @OneToMany(mappedBy = "department")
     @ToString.Exclude
